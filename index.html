@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียนข้อมูลผู้สูงอายุ</title>
+    <title>ลงทะเบียนผู้สูงอายุ</title>
     <!-- Google Fonts: Sarabun -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 for beautiful alerts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- LINE LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     
     <style>
         :root {
-            --primary-color: #0052D4;
-            --secondary-color: #6FB1FC;
-            --bg-gradient: linear-gradient(135deg, #eeeeee 0%, #0052D4 100%);
-            --text-color: #2c3e50;
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary: #64748b;
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         * {
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -31,80 +37,102 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: var(--bg-gradient);
+            background: radial-gradient(circle at top right, #dbeafe, #ffffff, #eff6ff);
             background-attachment: fixed;
+            color: var(--text-main);
         }
 
-        /* Animation หน้าต่างเคลื่อนไหว */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* Container & Card */
         .container {
-            width: 90%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.8s ease-out;
+            width: 92%;
+            max-width: 450px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             margin: 20px 0;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
+        }
+
+        .header .icon-box {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 15px;
         }
 
         .header h2 {
-            color: var(--primary-color);
-            margin: 0;
+            font-size: 26px;
             font-weight: 600;
-            font-size: 24px;
+            color: var(--primary);
+            margin: 0;
         }
 
         .header p {
-            color: #7f8c8d;
             font-size: 14px;
-            margin-top: 5px;
+            color: var(--text-muted);
+            margin-top: 8px;
         }
 
+        /* Form Styling */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-color);
-            font-weight: 400;
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .input-label i {
+            color: var(--primary);
             font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         input[type="text"],
         input[type="number"],
         select {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
             outline: none;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 16px;
-            background-color: #f9f9f9;
+            background-color: white;
         }
 
         input:focus, select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 8px rgba(0, 82, 212, 0.2);
-            background-color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
         }
 
         .row {
@@ -113,34 +141,54 @@
             gap: 15px;
         }
 
+        /* Custom Button */
         button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, #0052D4, #4364F7, #6FB1FC);
+            padding: 16px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 18px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 82, 212, 0.3);
-        }
-
-        button:active {
-            transform: scale(0.98);
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         button:hover {
-            box-shadow: 0 8px 20px rgba(0, 82, 212, 0.4);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* Loading Spinner */
-        .loading {
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Loading */
+        .loader-dots {
             display: none;
+            font-size: 14px;
+            color: var(--text-muted);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .container { padding: 30px 20px; }
+            .header h2 { font-size: 22px; }
         }
     </style>
 </head>
@@ -148,29 +196,32 @@
 
 <div class="container">
     <div class="header">
-        <h2>ลงทะเบียนผู้สูงอายุ</h2>
-        <p>กรุณากรอกข้อมูลให้ครบถ้วนเพื่อการดูแลที่ดียิ่งขึ้น</p>
+        <div class="icon-box">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <h2>ลงทะเบียนข้อมูล</h2>
+        <p>บันทึกข้อมูลเพื่อรับการดูแลที่เหมาะสม</p>
     </div>
 
     <form id="regForm">
         <div class="row">
             <div class="form-group">
-                <label>ชื่อ</label>
+                <label class="input-label"><i class="fas fa-user"></i> ชื่อ</label>
                 <input type="text" id="firstName" placeholder="ชื่อ" required>
             </div>
             <div class="form-group">
-                <label>นามสกุล</label>
+                <label class="input-label">นามสกุล</label>
                 <input type="text" id="lastName" placeholder="นามสกุล" required>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group">
-                <label>อายุ (ปี)</label>
+                <label class="input-label"><i class="fas fa-calendar-alt"></i> อายุ (ปี)</label>
                 <input type="number" id="age" placeholder="เช่น 65" required>
             </div>
             <div class="form-group">
-                <label>เพศ</label>
+                <label class="input-label"><i class="fas fa-venus-mars"></i> เพศ</label>
                 <select id="gender">
                     <option value="ชาย">ชาย</option>
                     <option value="หญิง">หญิง</option>
@@ -180,22 +231,28 @@
 
         <div class="row">
             <div class="form-group">
-                <label>น้ำหนัก (กก.)</label>
+                <label class="input-label"><i class="fas fa-weight"></i> น้ำหนัก (กก.)</label>
                 <input type="number" id="weight" step="0.1" placeholder="0.0">
             </div>
             <div class="form-group">
-                <label>ส่วนสูง (ซม.)</label>
+                <label class="input-label"><i class="fas fa-ruler-vertical"></i> ส่วนสูง (ซม.)</label>
                 <input type="number" id="height" placeholder="0">
             </div>
         </div>
 
         <div class="form-group">
-            <label>โรคประจำตัว (ถ้าไม่มีให้ระบุ -)</label>
-            <input type="text" id="disease" placeholder="ระบุโรคประจำตัว">
+            <label class="input-label"><i class="fas fa-notes-medical"></i> โรคประจำตัว</label>
+            <input type="text" id="disease" placeholder="ถ้าไม่มีให้ระบุ -">
         </div>
 
-        <button type="submit" id="submitBtn">บันทึกข้อมูล</button>
-        <div class="loading" id="loader">กำลังบันทึกข้อมูล...</div>
+        <button type="submit" id="submitBtn">
+            <span>บันทึกข้อมูล</span>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <div class="loader-dots" id="loader">
+            <i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึกข้อมูล...
+        </div>
     </form>
 </div>
 
@@ -225,11 +282,12 @@
     document.getElementById('regForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Show Loading
         const btn = document.getElementById('submitBtn');
         const loader = document.getElementById('loader');
+        
+        // Show Loading UI
         btn.disabled = true;
-        btn.style.opacity = "0.7";
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> บันทึกข้อมูล...';
         loader.style.display = "block";
 
         const formData = {
@@ -244,31 +302,34 @@
         };
 
         try {
-            const response = await fetch(GAS_URL, {
+            await fetch(GAS_URL, {
                 method: 'POST',
-                mode: 'no-cors', // สำคัญ: เพื่อเลี่ยงปัญหา CORS ใน GAS
+                mode: 'no-cors',
                 body: JSON.stringify(formData)
             });
             
-            // ใช้ SweetAlert2 แจ้งเตือน
             await Swal.fire({
                 title: 'สำเร็จ!',
                 text: 'บันทึกข้อมูลของคุณเรียบร้อยแล้ว',
                 icon: 'success',
-                confirmButtonColor: '#0052D4',
-                confirmButtonText: 'ตกลง'
+                confirmButtonColor: '#2563eb',
+                confirmButtonText: 'ตกลง',
+                backdrop: `rgba(0,0,0,0.4)`,
+                padding: '2em',
+                borderRadius: '20px'
             });
 
-            liff.closeWindow(); // ปิดหน้าต่างอัตโนมัติ
+            liff.closeWindow();
 
         } catch (error) {
             Swal.fire({
                 title: 'เกิดข้อผิดพลาด',
-                text: 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่',
-                icon: 'error'
+                text: 'ไม่สามารถบันทึกได้ในขณะนี้ กรุณาลองใหม่',
+                icon: 'error',
+                confirmButtonColor: '#2563eb'
             });
             btn.disabled = false;
-            btn.style.opacity = "1";
+            btn.innerHTML = '<span>บันทึกข้อมูล</span><i class="fas fa-chevron-right"></i>';
             loader.style.display = "none";
         }
     });
